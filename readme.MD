@@ -99,13 +99,13 @@ set OPENAI_API_BASE=https://my-super-proxy.vercel.app/v1
   - [x] `messages`
       - [x] `content`
       - [x] `role`
-          - [x] `system` (=>`user`)
+          - [x] `system` (=>`system_instruction`)
           - [x] `user`
           - [x] `assistant`
           - [ ] `tool` (v1beta)
       - [ ] `name`
       - [ ] `tool_calls`
-  - [x] `model` _(value ignored, autoselect "gemini-pro", or "-vision" for "gpt-4-vision-preview" request)_
+  - [x] `model` _(value ignored, model is set to `gemini-1.5-pro-latest`)_
   - [ ] `frequency_penalty`
   - [ ] `logit_bias`
   - [ ] `logprobs`
@@ -113,12 +113,11 @@ set OPENAI_API_BASE=https://my-super-proxy.vercel.app/v1
   - [x] `max_tokens`
   - [x] `n` (`candidateCount` <8) _n.b.: atm api does not accept >1_
   - [ ] `presence_penalty`
-  - [ ] `response_format`
+  - [x] `response_format`
   - [ ] `seed`
   - [x] `stop`: string|array (`stopSequences` [1,5])
   - [x] stream
-  - [x] `temperature` (0.0..1.0)
-      - [ ] <0, >1..2
+  - [x] `temperature` (0.0..2.0 for OpenAI, but Gemini supports up to infinity)
   - [x] `top_p`
   - [ ] `tools` (v1beta)
   - [ ] `tool_choice` (v1beta)
