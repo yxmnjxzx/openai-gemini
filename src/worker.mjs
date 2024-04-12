@@ -197,19 +197,14 @@ const transformMsg = async ({ role, content }) => {
 const transformMessages = async (messages) => {
   const contents = [];
   let system_instruction;
-  let lastRole;
   for (const item of messages) {
     if (item.role === "system") {
       delete item.role;
       system_instruction = await transformMsg(item);
-      continue;
+    } else {
+      item.role = item.role === "assistant" ? "model" : "user";
+      contents.push(await transformMsg(item));
     }
-    item.role = item.role === "assistant" ? "model" : "user";
-    if (item.role === "user" && lastRole === "user") {
-      contents.push({ role: "model", parts: { text: "" } });
-    }
-    lastRole = item.role;
-    contents.push(await transformMsg(item));
   }
   if (system_instruction && contents.length === 0) {
     contents.push({ role: "user", parts: { text: "" } });
@@ -255,7 +250,7 @@ const processResponse = async (candidates, model, id) => {
   return JSON.stringify({
     id,
     object: "chat.completion",
-    created: Date.now(),
+    created: Math.floor(Date.now()/1000),
     model,
     // system_fingerprint: "fp_69829325d0",
     choices: candidates.map(transformCandidatesMessage),
@@ -288,7 +283,7 @@ function transformResponseStream (cand, stop, first) {
   const data = {
     id: this.id,
     object: "chat.completion.chunk",
-    created: Date.now(),
+    created: Math.floor(Date.now()/1000),
     model: this.MODEL,
     // system_fingerprint: "fp_69829325d0",
     choices: [item],
